@@ -1,18 +1,31 @@
-This directory contains code for running the Gaussian process stacked generalisation analysis for spatiotemporal prediction of insecticide resistance phenotypes described in:
 
-Hancock PA, Hendriks CJM, Tangena J-A, Gibson H, Hemingway J, Coleman M, Gething PW, Bhatt S, Moyes CL, “Mapping trends in insecticide resistance phenotypes in African malaria vectors”.
+# map-ir-gp-stack
 
-Individual directories contain the code for running the level-0 machine-learning models, including the extreme gradient boosting (xgb), random forest (rf) and boosted generalised additive (bgam) models, and the gaussian process meta-model (gp meta-model).
+<!-- badges: start -->
+<!-- badges: end -->
 
-System requirements: This code is written in R software, which runs on a wide variety of UNIX platforms, Windows and Mac OS. The R software is quick to install.
+The goal of map-ir-gp-stack is to tidy up the original code from https://github.com/pahanc/Mapping-insecticide-resistance into a pipeline of sorts so we can reuse it.
 
-Software requirements: R, using the following packages:
-R-INLA
-LaplacesDemon
-zoo
-mboost
-xgboost
-data.table
-caret
+I've rearranged the repository to help me with this process.
 
-This code has been tested on R version 3.4.3 with the package R-INLA version 17.06.2, the package LaplacesDemon version 16.1.0, the package zoo version 1.8-2, the package caret version 6.0_81, the package xgboost version 0.6-4, the package mboost version 2.9-0 and the package data.table version 1.10.4-3.
+I will write down notes here to discuss the overall restructuring and reasons why.
+
+- `GP meta-model` has been renamed `gp-meta-model` to avoid spaced and ahve consistent lowercase.
+- put all analysis code into an `analysis` directory. This is to help separate out the inputs and outputs, and also so this README file is the first one the user sees. Mostly cosmetic.
+- There is some really nice `demo` code inside each of the models, which run in a short time period. These are being moved into `demo` directory:
+
+```
+analysis
+|- README.md
+|- bgam/
+|- rf/
+|- xgb/
+|- gp-meta-model/
+|- demo/
+  |- bgam/
+  |- rf/
+  |- xgb/
+  |- gp-meta-model/
+
+
+```
