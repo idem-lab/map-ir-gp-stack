@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 analysis/demo/bgam/gamb_*.RData
+model-output/
