@@ -70,7 +70,7 @@ The pieces of complexity that are managed here are:
   - test data
   - the entire dataset, I think from `inputs_data_all_wa_fact5d.r`
   
-Some notes on this process:
+## Some notes on this process:
 
 - A lot of this complexity can be managed with something like `tidymodels` and co
 - managing the test and training set is hard to understand exactly what is happening with that process, as it relies on `stk_val_inds`, the indices for the outer test set.
@@ -78,6 +78,31 @@ Some notes on this process:
 - I am unclear how the results from each of these models (bgam, rf, xgb) is combined, or if there is an order that these models are run.
 - it looks like bgam is only being fit once, and not iterating through the inner and outer loops?
 
+## fit-bgam.R <- l0_pred_fn_val_gamb_ind.r
+
+- This is a prototype of `pred_val_gamb()` from `l0_pred_fn_val_gamb_ind.r`
+- No printing of tuning/outer/inner loop information
+- no use of `library()` in the function
+- no use of `source` or `load` in the function
+- input data and covariates are instead specified as arguments to the function
+- `covariate.namesa` rewritten as `covariate_names_a`, `covariate.namesa` looks like a typo
+- `covariate.namesb` rewritten as `covariate_names_b`, `covariate.namesb` looks like a typo
+- `covariate.names` is overwritten at one point, changed this to `covariate_names_a_b`, since was `c(covariate.namesa, covariate.namesb)`.
+- removed `source("load_gen.r")` - we are going to assume that all functions are sourced when running this function
+- remove `load("stk_val_inds5.r")` - this contained a list object, `stk_val_inds`, comprising of 10 lists, each containing 4 lists, with a different number of items, but the total length of which is 245. This leads me to believe that this is part of the indexing for test/training. 
+- Reading the code, it seems `stk_val_inds` is an outer test set index list, so I will name this, `outer_test_index_list`
+- remove `load("non_spatial_val_sets6.r")` - this contained a list object, `val_ind`, which contained 10 lists, each with 245 numbers. Must also be related to the validation/training set indexing.
+- Reading the code, it seems `val_ind` is an inner test index list, so I will name this, `inner_test_index_list`
+- removed uses of `sapply` with `paste` since `paste` and `paste0` are vectorised
+- I think `model_lhs` is incorrectly named - it should be `model_rhs`, since these are on the right hand side of `~`.
+- change `testJ` to `test_data`
+- change `trainJ` to `train_data`
+
+Running an example test against the original output with the cleaned up R files shows us that the new changes are the same as the previous one.
+
+## Potential problems
+
+- I'm not sure what `tune_run` is doing - it isn't something that the user specifies, and it only seems to be run in setting up a column of the tuning parameters.
 
 - [x] Code needs to be styled
 - [] library calls should be moved up to a higher level R file and stored there
