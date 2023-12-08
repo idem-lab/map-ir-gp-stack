@@ -38,3 +38,49 @@ It produces some output of the model, `gamb_pred_val_run2_3.RData`,which is save
 ## Some initial code review notes
 
 This repo should separate out the data into a data directory within this repository. If these are the data are used in each folder, then they should not be repeated over all the repositories.
+
+I need to establish a set of testing data that I can validate the changes to the code on. Accordingly, I'm going to run all of the model outputs.
+
+The first goal is to instead of run things from the terminal, to be able to run them from within R.
+
+- Functions etc are stored in `load_gen.r`
+- The main code file is `l0_pred_fn_val_gamb_ind.r`
+- The inputs to this are being handled by `pred_runs_val_gamb_ind.R`
+- It looks like `load_gen.r` is duplicated across every single directory.
+
+Reading the code in `l0_pred_fn_val_gamb_ind.r`, it seems to follow this pattern:
+
+1. print tune and outer and inner validation sets. The outer validation set is `val_run`, and the inner validation set is `val_run2`.
+
+
+The pieces of complexity that are managed here are:
+
+- Managing the indexing for the inner and outer validation sets
+- Doing emplogit transform on labels (I think that is `pcent_mortality`), then doing MLE to choose theta parameters
+- constructing hyperparameter grid
+- Making specific format changes for BGAM - building formulas, etc
+- Managing the construction of the test and training data
+- model fitting on training data
+- predicting to test data
+- calculating RMSE
+- building output object that contains:
+  - rmse
+  - training model
+  - model predictions on test data
+  - test data
+  - the entire dataset, I think from `inputs_data_all_wa_fact5d.r`
+  
+Some notes on this process:
+
+- A lot of this complexity can be managed with something like `tidymodels` and co
+- managing the test and training set is hard to understand exactly what is happening with that process, as it relies on `stk_val_inds`, the indices for the outer test set.
+- And so I am currently unclear what the process is with the outer and inner validation sets. Once I understand that, I think I will know how to start attacking this.
+- I am unclear how the results from each of these models (bgam, rf, xgb) is combined, or if there is an order that these models are run.
+- it looks like bgam is only being fit once, and not iterating through the inner and outer loops?
+
+
+- [x] Code needs to be styled
+- [] library calls should be moved up to a higher level R file and stored there
+- [] 
+- []
+
