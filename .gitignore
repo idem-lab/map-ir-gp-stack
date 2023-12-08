@@ -4,3 +4,4 @@
 .Ruserdata
 analysis/demo/bgam/gamb_*.RData
 model-output/
+_targets

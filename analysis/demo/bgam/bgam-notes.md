@@ -100,6 +100,13 @@ The pieces of complexity that are managed here are:
 
 Running an example test against the original output with the cleaned up R files shows us that the new changes are the same as the previous one.
 
+## Using targets
+
+This repo is now switching over to targets for the bgam data, and so we have to make a few changes
+
+- Remove `l0_pred_fn_val_gamb_ind.r` - this is superceded by `fit-bgam.R`
+- 
+
 ## Potential problems
 
 - I'm not sure what `tune_run` is doing - it isn't something that the user specifies, and it only seems to be run in setting up a column of the tuning parameters.
